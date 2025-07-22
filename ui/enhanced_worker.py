@@ -97,7 +97,7 @@ class EnhancedWorker(QThread):
                 # 处理chunk格式 - 不进行extract_message处理，直接累积原始内容
                 if isinstance(chunk, tuple) and len(chunk) == 2:
                     speaker, content = chunk
-                    if speaker == "娜迦":
+                    if speaker == "Ren":
                         content_str = str(content)
                         result_chunks.append(content_str)
                         # 发送部分结果用于实时显示
@@ -168,7 +168,7 @@ class StreamingWorker(EnhancedWorker):
                 # 处理chunk - 不进行extract_message处理，直接累积原始内容
                 if isinstance(chunk, tuple) and len(chunk) == 2:
                     speaker, content = chunk
-                    if speaker == "娜迦":
+                    if speaker == "Ren":
                         content_str = str(content)
                         result_chunks.append(content_str)
                         
@@ -279,7 +279,7 @@ class BatchWorker(EnhancedWorker):
                 # 不进行extract_message处理，直接累积原始内容
                 if isinstance(chunk, tuple) and len(chunk) == 2:
                     speaker, content = chunk
-                    if speaker == "娜迦":
+                    if speaker == "Ren":
                         result_chunks.append(str(content))
                 else:
                     result_chunks.append(str(chunk))
