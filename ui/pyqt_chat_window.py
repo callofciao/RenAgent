@@ -280,7 +280,7 @@ class ChatWindow(QWidget):
         s.img.setMaximumSize(16777215,16777215)
         s.img.setStyleSheet('background:transparent; border: none;')
         stack.addWidget(s.img)
-        nick=QLabel(f"● 娜迦{config.system.version}",s.side)
+        nick=QLabel(f"● Ren{config.system.version}",s.side)
         nick.setStyleSheet("""
             QLabel {
                 color: #fff;
@@ -482,7 +482,7 @@ class ChatWindow(QWidget):
         """追加响应片段（流式模式）"""
         s.current_response += chunk
         # 实时更新显示（可选，避免过于频繁的更新）
-        # s.update_last_message("娜迦", s.current_response)
+        # s.update_last_message("Ren", s.current_response)
     
     def finalize_streaming_response(s):
         """完成流式响应"""
@@ -490,7 +490,7 @@ class ChatWindow(QWidget):
             # 对累积的完整响应进行消息提取（多步自动\n分隔）
             from ui.response_utils import extract_message
             final_message = extract_message(s.current_response)
-            s.add_user_message("娜迦", final_message)
+            s.add_user_message("Ren", final_message)
         s.progress_widget.stop_loading()
     
     def on_response_finished(s, response):
@@ -501,7 +501,7 @@ class ChatWindow(QWidget):
         if not s.current_response:  # 如果流式没有收到数据，使用最终结果
             from ui.response_utils import extract_message
             final_message = extract_message(response)
-            s.add_user_message("娜迦", final_message)
+            s.add_user_message("Ren", final_message)
         s.progress_widget.stop_loading()
     
     def on_batch_response_finished(s, response):
@@ -511,7 +511,7 @@ class ChatWindow(QWidget):
             return  # 不显示，因为已经在cancel_current_task中显示了
         from ui.response_utils import extract_message
         final_message = extract_message(response)
-        s.add_user_message("娜迦", final_message)
+        s.add_user_message("Ren", final_message)
         s.progress_widget.stop_loading()
     
     def handle_error(s, error_msg):
