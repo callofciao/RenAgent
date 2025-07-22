@@ -24,7 +24,7 @@ try:
     from summer_memory.memory_manager import memory_manager
 except Exception as e:
     logger = logging.getLogger("NagaConversation")
-    logger.error(f"夏园记忆系统加载失败: {e}")
+    logger.error(f"怪盗记忆系统加载失败: {e}")
     memory_manager = None
 
 def now():
@@ -155,7 +155,7 @@ class NagaConversation: # 对话主类
         
         f = os.path.join(log_dir, f'{d}.txt')
         with open(f, 'a', encoding='utf-8') as w:
-            w.write('-'*50 + f'\n时间: {d} {t}\n用户: {u}\n娜迦: {a}\n\n')
+            w.write('-'*50 + f'\n时间: {d} {t}\n用户: {u}\nRen: {a}\n\n')
 
     async def _call_llm(self, messages: List[Dict]) -> Dict:
         """调用LLM API"""
@@ -386,7 +386,7 @@ class NagaConversation: # 对话主类
         # 只保留普通文本流式输出逻辑 #
         async def text_stream():
             for line in a.splitlines():
-                yield ("娜迦", line)
+                yield ("Ren", line)
         return text_stream()
 
     def _format_services_for_prompt(self, available_services: dict) -> str:
@@ -510,7 +510,7 @@ class NagaConversation: # 对话主类
             # 开发者模式优先判断
             if u.strip() == "#devmode":
                 self.dev_mode = True
-                yield ("娜迦", "已进入开发者模式")
+                yield ("Ren", "已进入开发者模式")
                 return
 
             # 只在语音输入时显示处理提示
@@ -571,7 +571,7 @@ class NagaConversation: # 对话主类
                 
                 # 流式输出最终结果
                 for line in final_content.splitlines():
-                    yield ("娜迦", line)
+                    yield ("Ren", line)
                 
                 # 保存对话历史
                 self.messages += [{"role": "user", "content": u}, {"role": "assistant", "content": final_content}]
@@ -591,13 +591,13 @@ class NagaConversation: # 对话主类
                     try:
                         await asyncio.wait_for(thinking_task, timeout=3.0)
                         if thinking_task.result():
-                            yield ("娜迦", "\n💡 这个问题较为复杂，下面我会更详细地解释这个流程...")
+                            yield ("Ren", "\n💡 这个问题较为复杂，下面我会更详细地解释这个流程...")
                             # 启动深度思考
                             try:
                                 thinking_result = await self.tree_thinking.think_deeply(u)
                                 if thinking_result and "answer" in thinking_result:
                                     # 直接使用thinking系统的结果，避免重复处理
-                                    yield ("娜迦", f"\n{thinking_result['answer']}")
+                                    yield ("Ren", f"\n{thinking_result['answer']}")
                                     
                                     # 更新对话历史
                                     final_thinking_answer = thinking_result['answer']
@@ -612,7 +612,7 @@ class NagaConversation: # 对话主类
                                             logger.error(f"GRAG记忆存储失败: {e}")
                             except Exception as e:
                                 logger.error(f"深度思考处理失败: {e}")
-                                yield ("娜迦", f"🌳 深度思考系统出错: {str(e)}")
+                                yield ("Ren", f"🌳 深度思考系统出错: {str(e)}")
                     except asyncio.TimeoutError:
                         # 超时取消任务
                         thinking_task.cancel()
@@ -621,7 +621,7 @@ class NagaConversation: # 对话主类
                 
             except Exception as e:
                 print(f"工具调用循环失败: {e}")
-                yield ("娜迦", f"[MCP异常]: {e}")
+                yield ("Ren", f"[MCP异常]: {e}")
                 return
 
             return
@@ -629,7 +629,7 @@ class NagaConversation: # 对话主类
             import sys
             import traceback
             traceback.print_exc(file=sys.stderr)
-            yield ("娜迦", f"[MCP异常]: {e}")
+            yield ("Ren", f"[MCP异常]: {e}")
             return
 
     async def get_response(self, prompt: str, temperature: float = 0.7) -> str:
